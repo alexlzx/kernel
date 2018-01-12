@@ -1,0 +1,87 @@
+
+This file is to include your testing documentation. The file is to be
+in plain text ASCII and properly spaced and edited so that when it is
+viewed on a Linux machine it is readable. Not all ASCII files created
+on a Windows machine display as expected due to the differences with
+respect to how new lines and carriage returns are treated. Line widths
+are to be limited to 80 characters.
+
+
+
+
+
+
+
+We are using the A2 solution from Stash for this assignment
+Note: in order to see the corresponding tests clearly
+need to comment out each part of the test seperately before
+
+
+/*----- showing prioritization and signals interrupting each other -------*/
+creating 3 process A, B, C
+A calls signalhandler for signal 8, signal 9, and sleep for some time
+B calls kills A and signal 8 successfully
+C calls kills A and signal 9 unsuccessfully because A is already killed
+
+/*------------------------ testing syssighandler ----------------------*/
+Testing an invalid signal number "34" in syssighandler argument
+@signal_handler: is an example signal handler
+@old_handler: a random old_handler created to point to a random address
+syssighandler(34, &signal_handler, old_handler);
+return -1 with PASS statement.
+
+/*------------------------ testing syskill ----------------------*/
+Testing if current pid can kill pid 0 which is idle process
+@ 0 is the pid to kill
+@ 6 is the signal number to kill
+syskill(0, 6);
+return -1 with PASS statement
+
+/*------------------------ testing syssigwait ----------------------*/
+Testing if a process B will wait until process A terminates
+if process A is not in ready queue, it should return -2
+@ A: is a process calling syssleep(10000);
+@ B: it calls syssigwait(A)
+since A is sleeping and so it's not in the ready queue
+return -2 with PASS statement
+
+/*------------------------ testing sysopen ----------------------*/
+Testing if sysopen can open an invalid device number 5
+sysopen(5);
+return -1 with PASS statement
+
+/*------------------------ testing syswrite ----------------------*/
+Testing if syswrite can write an invalid file descriptor
+syswrite(4, buff, 8);
+since fd 4 is invalid,
+return -1 with PASS statement
+
+/*------------------------ testing sysioctl ----------------------*/
+Testing if sysioctl accepts invalid commands
+first open the device KB_1
+then pass the file descriptor with random commands into sysioctl()
+this function call dvcntl() in device structure (which is keyboard)
+since keyboard only accepts commands 53, 55, 56
+so it will return -1 with PASS statement
+
+/*------------------------ testing sysread ----------------------*/
+first we call sysopen to open KB_1
+then fill up the buffer by entering 5 characters 
+it will return -1 to indicate buffer is full
+
+/*------------------------ testing other1 ----------------------*/
+testing if sysclose can close device after sysopen the device
+call sysopen to open KB_1 and close it with the corresponding file descriptor
+return 0 with PASS statement
+
+/*------------------------ testing other2 ----------------------*/
+kprintf("Test (10): \n");
+Testing if sysread end of file
+call sysopen to open KB_1
+call sysread to read the buffer where the buffer length is much greater than buffer
+return 0 to indicate EOF with PASS statement
+
+
+
+
+    
